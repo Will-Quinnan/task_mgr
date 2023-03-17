@@ -8,7 +8,7 @@ def output_formatter(results):
             "id": result[0],
             "summary": result[1],
             "description": result[2],
-            "status": result[3],
+            "status_id": result[3],
             "active": result[4]
         }
         out.append(temp)
@@ -17,7 +17,7 @@ def output_formatter(results):
 
 def scan():
     conn = get_db()
-    cursor = conn.exicute("SELECT * FROM task", ())
+    cursor = conn.execute("SELECT * FROM task", ())
     results = cursor.fetchall()
     cursor.close()
     conn.close()
@@ -26,7 +26,7 @@ def scan():
 
 def select_by_id(pk):
     conn = get_db()
-    cursor = conn.exicute("SELECT * FROM task WHERE id=?", (pk,))
+    cursor = conn.execute("SELECT * FROM task WHERE id=?", (pk,))
     results = cursor.fetchall()
     cursor.close()
     conn.close()
@@ -37,48 +37,48 @@ def insert(task_data):
     task_tuple = (
         task_data.get("summary"),
         task_data.get("description"),
-        task_data.get("status"),
+        task_data.get("status_id"),
         task_data.get("active")
     )
     statement = """
         INSERT INTO task (
             summary,
             description,
-            status,
+            status_id,
             active
         ) VALUES (?, ?, ?, ?)
         """
-        conn = get_db()
-        conn.exicute(statement, task_tuple)
-        conn.commit()
-        conn.close()
+    conn = get_db()
+    conn.execute(statement, task_tuple)
+    conn.commit()
+    conn.close()
 
 
 def update(task_data, pk):
     stmt_tuple = (
         task_data.get("summary"),
         task_data.get("description"),
-        task_data.get("status"),
+        task_data.get("status_id"),
         task_data.get("active"),
         pk
     )
-        statement = """
-            UPDATE task 
-            SET summary = ?,
-                description = ?,
-                status = ?,
-                active = ?
-            WHERE id = ?
-        """
-        conn = get_db()
-        conn.exicute(statement, task_tuple)
-        conn.commit()
-        conn.close()
+    statement = """
+        UPDATE task 
+        SET summary = ?,
+            description = ?,
+            status_id = ?,
+            active = ?
+        WHERE id = ?
+    """
+    conn = get_db()
+    conn.execute(statement, task_tuple)
+    conn.commit()
+    conn.close()
 
 
 def delete(pk):
     conn = get_db()
-    conn.exicute(
+    conn.execute(
         "DELETE FROM task WHEERE id=?", 
         (pk,))
     conn.commit()
