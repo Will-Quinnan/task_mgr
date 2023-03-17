@@ -71,7 +71,7 @@ def update(task_data, pk):
         WHERE id = ?
     """
     conn = get_db()
-    conn.execute(statement, task_tuple)
+    conn.execute(statement, task_data)
     conn.commit()
     conn.close()
 
